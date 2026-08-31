@@ -28,3 +28,8 @@ dist/
 
 # VCV Rack SDK (installed locally, not versioned)
 Rack-SDK/
+
+# Private working files (not for redistribution)
+Vorüberlergungen/
+Artwork fuer Design/
+README.md
