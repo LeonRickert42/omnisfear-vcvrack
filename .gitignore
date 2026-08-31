@@ -25,3 +25,6 @@ dist/
 *.dylib
 *.dll
 *.vcvplugin
+
+# VCV Rack SDK (installed locally, not versioned)
+Rack-SDK/

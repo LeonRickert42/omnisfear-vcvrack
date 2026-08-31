@@ -1,5 +1,5 @@
-# If RACK_DIR is not defined when calling the Makefile, default to two directories above.
-RACK_DIR ?= ../..
+# If RACK_DIR is not defined when calling the Makefile, use the SDK next to this plugin dir.
+RACK_DIR ?= ../Rack-SDK
 
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS +=
