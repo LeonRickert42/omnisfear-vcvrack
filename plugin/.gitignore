@@ -1,0 +1,17 @@
+# Build output
+build/
+dist/
+*.o
+*.d
+*.so
+*.dylib
+*.dll
+*.vcvplugin
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp

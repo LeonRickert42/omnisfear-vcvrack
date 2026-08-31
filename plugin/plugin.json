@@ -1,0 +1,26 @@
+{
+  "slug": "Omnisfear",
+  "name": "Project Omnisfear",
+  "version": "0.1.0",
+  "license": "GPL-3.0-or-later",
+  "brand": "Omnisfear",
+  "author": "Project Omnisfear",
+  "authorEmail": "",
+  "authorUrl": "",
+  "pluginUrl": "",
+  "manualUrl": "",
+  "sourceUrl": "",
+  "donateUrl": "",
+  "changelogUrl": "",
+  "modules": [
+    {
+      "slug": "Motive",
+      "name": "OMNISFEAR MOTIVE",
+      "description": "Musical behavior engine — motive capture, mutation, memory, recall.",
+      "tags": [
+        "Sequencer",
+        "Random"
+      ]
+    }
+  ]
+}
