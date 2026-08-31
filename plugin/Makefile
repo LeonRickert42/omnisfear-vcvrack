@@ -11,6 +11,7 @@ LDFLAGS +=
 
 # Add .cpp files to the build
 SOURCES += $(wildcard src/*.cpp)
+SOURCES += $(wildcard src/engine/*.cpp)
 
 # Add files to the ZIP package when running `make dist`
 # res/ and LICENSE are automatically included by plugin.mk

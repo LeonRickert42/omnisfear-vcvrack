@@ -1,7 +1,7 @@
 #include "plugin.hpp"
+#include "engine/MotiveEngine.hpp"
 
-// OMNISFEAR MOTIVE — v0.1 skeleton
-// Only params, I/O, JSON stubs and panel design. No DSP behavior yet.
+// OMNISFEAR MOTIVE — v0.2 capture & replay
 // See ../Vorüberlergungen/PROJECT OMNISFEAR.md for the design.
 
 struct Motive : Module {
@@ -31,6 +31,12 @@ struct Motive : Module {
 		LIGHTS_LEN
 	};
 
+	omnisfear::MotiveEngine engine;
+	dsp::SchmittTrigger clockTrig;
+	dsp::SchmittTrigger resetTrig;
+	dsp::SchmittTrigger gateTrig;
+	dsp::PulseGenerator phrasePulse;
+
 	Motive() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 
@@ -52,8 +58,26 @@ struct Motive : Module {
 	}
 
 	void process(const ProcessArgs& args) override {
-		// TODO: motive engine
-		(void) args;
+		omnisfear::MotiveEngine::Inputs in;
+		in.sampleTime = args.sampleTime;
+		in.cv         = inputs[CV_INPUT].getVoltage();
+		in.clockEdge  = clockTrig.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 1.f);
+		in.resetEdge  = resetTrig.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 1.f);
+
+		auto gEvent = gateTrig.processEvent(inputs[GATE_INPUT].getVoltage(), 0.1f, 1.f);
+		in.gateHigh     = gateTrig.isHigh();
+		in.gateEdgeUp   = (gEvent == dsp::SchmittTrigger::TRIGGERED);
+		in.gateEdgeDown = (gEvent == dsp::SchmittTrigger::UNTRIGGERED);
+
+		auto outE = engine.process(in);
+
+		if (outE.phraseTrigger)
+			phrasePulse.trigger(1e-3f);
+
+		outputs[CV_OUTPUT].setVoltage(outE.cv);
+		outputs[GATE_OUTPUT].setVoltage(outE.gate);
+		outputs[ACCENT_OUTPUT].setVoltage(outE.accent);
+		outputs[PHRASE_OUTPUT].setVoltage(phrasePulse.process(args.sampleTime) ? 10.f : 0.f);
 	}
 
 	json_t* dataToJson() override {
