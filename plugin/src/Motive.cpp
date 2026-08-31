@@ -113,9 +113,7 @@ struct MotivePanelText : Widget {
 		monoFont = asset::system("res/fonts/ShareTechMono-Regular.ttf");
 
 		const NVGcolor cTitle   = nvgRGB(0xe8, 0xe6, 0xdd);
-		const NVGcolor cSub     = nvgRGB(0xa5, 0xa4, 0x9a);
 		const NVGcolor cLabel   = nvgRGB(0xc8, 0xc8, 0xbd);
-		const NVGcolor cTag     = nvgRGB(0x5c, 0x5c, 0x56);
 		const NVGcolor cSection = nvgRGB(0x8a, 0x88, 0x80);
 		const NVGcolor cInHdr   = nvgRGB(0x7a, 0x7a, 0x72);
 		const NVGcolor cOutHdr  = nvgRGB(0xc8, 0x58, 0x2a);
@@ -124,12 +122,8 @@ struct MotivePanelText : Widget {
 
 		const int centerBase = NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE;
 		const int leftBase   = NVG_ALIGN_LEFT   | NVG_ALIGN_BASELINE;
-		const int rightBase  = NVG_ALIGN_RIGHT  | NVG_ALIGN_BASELINE;
 
-		labels.push_back({67.12f,  6.9f, 1.6f, 0.15f, rightBase,  cTag,     monoFont.c_str(), "MOTIVE ENGINE"});
-
-		labels.push_back({35.56f, 14.5f, 6.4f, 0.40f, centerBase, cTitle,   boldFont.c_str(), "OMNISFEAR"});
-		labels.push_back({35.56f, 21.3f, 2.6f, 1.40f, centerBase, cSub,     monoFont.c_str(), "MOTIVE"});
+		labels.push_back({35.56f, 17.5f, 7.5f, 0.60f, centerBase, cTitle,   boldFont.c_str(), "MOTIVE"});
 
 		labels.push_back({14.00f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MEMORY"});
 		labels.push_back({35.56f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MUTATION"});
@@ -174,7 +168,7 @@ struct MotiveWidget : ModuleWidget {
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/Motive.svg")));
 
 		addChild(new MotivePanelText(box.size));
-		addChild(new PngImage(Vec(3.5f, 4.8f), Vec(24.0f, 2.0f),
+		addChild(new PngImage(Vec(22.56f, 4.6f), Vec(26.0f, 2.2f),
 			asset::plugin(pluginInstance, "res/wordmark.png")));
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
