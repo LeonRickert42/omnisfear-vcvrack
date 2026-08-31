@@ -68,6 +68,28 @@ struct Motive : Module {
 	}
 };
 
+// Small helper: renders a PNG (with alpha) at an mm-positioned box via NanoVG.
+struct PngImage : Widget {
+	std::string path;
+
+	PngImage(Vec posMm, Vec sizeMm, const std::string& p) {
+		box.pos = mm2px(posMm);
+		box.size = mm2px(sizeMm);
+		path = p;
+	}
+
+	void draw(const DrawArgs& args) override {
+		std::shared_ptr<Image> img = APP->window->loadImage(path);
+		if (!img)
+			return;
+		NVGpaint paint = nvgImagePattern(args.vg, 0, 0, box.size.x, box.size.y, 0.f, img->handle, 1.f);
+		nvgBeginPath(args.vg);
+		nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
+		nvgFillPaint(args.vg, paint);
+		nvgFill(args.vg);
+	}
+};
+
 // NanoSVG (used by Rack for panel SVGs) does not render <text>. All labels are drawn here via NanoVG.
 struct MotivePanelText : Widget {
 	struct Label {
@@ -104,7 +126,6 @@ struct MotivePanelText : Widget {
 		const int leftBase   = NVG_ALIGN_LEFT   | NVG_ALIGN_BASELINE;
 		const int rightBase  = NVG_ALIGN_RIGHT  | NVG_ALIGN_BASELINE;
 
-		labels.push_back({ 4.00f,  6.9f, 1.6f, 0.15f, leftBase,   cTag,     monoFont.c_str(), "PROJECT OMNISFEAR"});
 		labels.push_back({67.12f,  6.9f, 1.6f, 0.15f, rightBase,  cTag,     monoFont.c_str(), "MOTIVE ENGINE"});
 
 		labels.push_back({35.56f, 14.5f, 6.4f, 0.40f, centerBase, cTitle,   boldFont.c_str(), "OMNISFEAR"});
@@ -153,6 +174,8 @@ struct MotiveWidget : ModuleWidget {
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/Motive.svg")));
 
 		addChild(new MotivePanelText(box.size));
+		addChild(new PngImage(Vec(3.5f, 4.8f), Vec(24.0f, 2.0f),
+			asset::plugin(pluginInstance, "res/wordmark.png")));
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
