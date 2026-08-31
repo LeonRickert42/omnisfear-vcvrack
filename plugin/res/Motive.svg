@@ -52,20 +52,28 @@
   <line x1="3" y1="74.5" x2="68.12" y2="74.5" stroke="url(#chromeH)" stroke-width="0.18"/>
   <line x1="3" y1="75.0" x2="68.12" y2="75.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 
-  <!-- Small rust tick between IN and OUT sections -->
-  <rect x="30.56" y="106.8" width="10" height="0.5" fill="url(#rustGrad)"/>
+  <!-- IN section background (cool tint) -->
+  <rect x="2" y="77.0" width="67.12" height="27" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
+  <rect x="2" y="77.0" width="67.12" height="27" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
 
-  <!-- Faint rings behind input jacks -->
-  <circle cx=" 9.0" cy="95"  r="5.2" fill="none" stroke="#1c1b17" stroke-width="0.2"/>
-  <circle cx="24.0" cy="95"  r="5.2" fill="none" stroke="#1c1b17" stroke-width="0.2"/>
-  <circle cx="39.0" cy="95"  r="5.2" fill="none" stroke="#1c1b17" stroke-width="0.2"/>
-  <circle cx="54.0" cy="95"  r="5.2" fill="none" stroke="#1c1b17" stroke-width="0.2"/>
+  <!-- Full-width rust divider between IN and OUT -->
+  <rect x="4" y="105.0" width="63.12" height="0.6" fill="url(#rustGrad)"/>
 
-  <!-- Faint rings behind output jacks (warmer tone) -->
-  <circle cx=" 9.0" cy="115" r="5.2" fill="none" stroke="#3a221a" stroke-width="0.2"/>
-  <circle cx="24.0" cy="115" r="5.2" fill="none" stroke="#3a221a" stroke-width="0.2"/>
-  <circle cx="39.0" cy="115" r="5.2" fill="none" stroke="#3a221a" stroke-width="0.2"/>
-  <circle cx="54.0" cy="115" r="5.2" fill="none" stroke="#3a221a" stroke-width="0.2"/>
+  <!-- OUT section background (warm tint) -->
+  <rect x="2" y="106.0" width="67.12" height="19.5" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
+  <rect x="2" y="106.0" width="67.12" height="19.5" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
+
+  <!-- Rings behind input jacks -->
+  <circle cx=" 9.0" cy="95"  r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="24.0" cy="95"  r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="39.0" cy="95"  r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="54.0" cy="95"  r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+
+  <!-- Rings behind output jacks (warm) -->
+  <circle cx=" 9.0" cy="115" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="24.0" cy="115" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="39.0" cy="115" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="54.0" cy="115" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
 
   <!-- Bottom double chrome hairline -->
   <line x1="3" y1="125.6" x2="68.12" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>

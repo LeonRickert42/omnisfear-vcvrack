@@ -138,14 +138,12 @@ struct MotivePanelText : Widget {
 
 		const NVGcolor cTitle   = nvgRGB(0xe8, 0xe6, 0xdd);
 		const NVGcolor cLabel   = nvgRGB(0xc8, 0xc8, 0xbd);
-		const NVGcolor cSection = nvgRGB(0x8a, 0x88, 0x80);
-		const NVGcolor cInHdr   = nvgRGB(0x7a, 0x7a, 0x72);
-		const NVGcolor cOutHdr  = nvgRGB(0xc8, 0x58, 0x2a);
-		const NVGcolor cIn      = nvgRGB(0xa5, 0xa4, 0x9a);
-		const NVGcolor cOut     = nvgRGB(0xd8, 0xd3, 0xc2);
+		const NVGcolor cInHdr   = nvgRGB(0x9a, 0xb0, 0xc4);
+		const NVGcolor cOutHdr  = nvgRGB(0xd0, 0x6a, 0x38);
+		const NVGcolor cIn      = nvgRGB(0x9a, 0xa8, 0xba);
+		const NVGcolor cOut     = nvgRGB(0xe4, 0xc4, 0xa8);
 
 		const int centerBase = NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE;
-		const int leftBase   = NVG_ALIGN_LEFT   | NVG_ALIGN_BASELINE;
 
 		labels.push_back({35.56f, 17.5f, 7.5f, 0.60f, centerBase, cTitle,   boldFont.c_str(), "MOTIVE"});
 
@@ -155,15 +153,13 @@ struct MotivePanelText : Widget {
 		labels.push_back({24.78f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "DENSITY"});
 		labels.push_back({46.34f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "VARIATION"});
 
-		labels.push_back({35.56f, 82.8f, 2.4f, 2.00f, centerBase, cSection, monoFont.c_str(), "SIGNAL"});
-
-		labels.push_back({ 4.00f, 88.8f,  1.9f, 0.50f, leftBase,   cInHdr,  monoFont.c_str(), "IN"});
+		labels.push_back({35.56f, 84.5f, 3.4f, 3.20f, centerBase, cInHdr,  boldFont.c_str(), "IN"});
 		labels.push_back({ 9.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CLK"});
 		labels.push_back({24.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CV"});
 		labels.push_back({39.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "GATE"});
 		labels.push_back({54.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "RST"});
 
-		labels.push_back({ 4.00f, 108.8f, 1.9f, 0.50f, leftBase,   cOutHdr, monoFont.c_str(), "OUT"});
+		labels.push_back({35.56f, 109.5f, 3.4f, 3.20f, centerBase, cOutHdr, boldFont.c_str(), "OUT"});
 		labels.push_back({ 9.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "CV"});
 		labels.push_back({24.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "GATE"});
 		labels.push_back({39.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "ACC"});
