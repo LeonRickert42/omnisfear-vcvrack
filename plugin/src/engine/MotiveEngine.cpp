@@ -12,6 +12,13 @@ static float clamp01(float x) {
 	return x;
 }
 
+static float clampCV(float v) {
+	const float lim = MAX_ANCHOR + MAX_INTERVAL;
+	if (v >  lim) return  lim;
+	if (v < -lim) return -lim;
+	return v;
+}
+
 static float meanVelocity(const NormalizedMotive& m) {
 	if (m.count == 0) return 0.f;
 	float s = 0.f;
@@ -241,7 +248,7 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 	else {
 		while (replayCursor < normalized.count && normalized.events[replayCursor].startPos <= phrasePos + 1e-5f) {
 			const NormalizedEvent& e = normalized.events[replayCursor];
-			latchedCV        = normalized.anchorPitch + e.pitchInterval;
+			latchedCV        = clampCV(normalized.anchorPitch + e.pitchInterval);
 			latchedGate      = 10.f;
 			latchedAccent    = e.velocity * 10.f;
 			replayGateOffPos = e.startPos + e.gateLen;

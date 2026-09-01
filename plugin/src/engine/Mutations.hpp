@@ -4,6 +4,11 @@
 
 namespace omnisfear {
 
+// Pitch bounds in V/Oct. Anchor drift and per-event intervals are clamped
+// so that repeated mutations cannot walk the melody into ear-piercing octaves.
+constexpr float MAX_ANCHOR   = 2.0f;   // anchor stays within ±2 V (~C2..C6)
+constexpr float MAX_INTERVAL = 1.5f;   // per-event interval stays within ±1.5 V from anchor
+
 // Pure transformations of a NormalizedMotive. In-place, deterministic given rng.
 // Each keeps musical identity as much as possible for its category.
 

@@ -3,6 +3,12 @@
 
 namespace omnisfear {
 
+static inline float clampf(float x, float lo, float hi) {
+	if (x < lo) return lo;
+	if (x > hi) return hi;
+	return x;
+}
+
 void sortByStart(NormalizedMotive& m) {
 	for (int i = 1; i < m.count; i++) {
 		NormalizedEvent x = m.events[i];
@@ -48,12 +54,12 @@ void recomputeDirection(NormalizedMotive& m) {
 }
 
 void mutate_transpose(NormalizedMotive& m, float deltaVolts) {
-	m.anchorPitch += deltaVolts;
+	m.anchorPitch = clampf(m.anchorPitch + deltaVolts, -MAX_ANCHOR, MAX_ANCHOR);
 }
 
 void mutate_invertContour(NormalizedMotive& m) {
 	for (int i = 0; i < m.count; i++) {
-		m.events[i].pitchInterval = -m.events[i].pitchInterval;
+		m.events[i].pitchInterval = clampf(-m.events[i].pitchInterval, -MAX_INTERVAL, MAX_INTERVAL);
 	}
 	recomputeDirection(m);
 }
@@ -83,7 +89,7 @@ void mutate_rotateRhythm(NormalizedMotive& m, int ticks) {
 
 void mutate_expandIntervals(NormalizedMotive& m, float factor) {
 	for (int i = 0; i < m.count; i++) {
-		m.events[i].pitchInterval *= factor;
+		m.events[i].pitchInterval = clampf(m.events[i].pitchInterval * factor, -MAX_INTERVAL, MAX_INTERVAL);
 	}
 	recomputeDirection(m);
 }
@@ -92,7 +98,10 @@ void mutate_octaveDisplacement(NormalizedMotive& m, Rng& rng, float prob) {
 	for (int i = 0; i < m.count; i++) {
 		if (rng.uniform() < prob) {
 			float sign = (rng.uniform() < 0.5f) ? -1.f : 1.f;
-			m.events[i].pitchInterval += sign * 1.f;
+			float next = m.events[i].pitchInterval + sign * 1.f;
+			if (next > MAX_INTERVAL || next < -MAX_INTERVAL)
+				next = m.events[i].pitchInterval - sign * 1.f;
+			m.events[i].pitchInterval = clampf(next, -MAX_INTERVAL, MAX_INTERVAL);
 		}
 	}
 	recomputeDirection(m);
@@ -115,7 +124,7 @@ void mutate_addNeighbor(NormalizedMotive& m, Rng& rng) {
 	// Neighbor: ±1 or ±2 semitones from source, excluding zero.
 	int step = int(rng.next() % 4) - 2;
 	if (step == 0) step = 1;
-	n.pitchInterval = src.pitchInterval + float(step) / 12.f;
+	n.pitchInterval = clampf(src.pitchInterval + float(step) / 12.f, -MAX_INTERVAL, MAX_INTERVAL);
 	n.velocity = src.velocity * 0.7f;
 
 	m.events[m.count++] = n;
