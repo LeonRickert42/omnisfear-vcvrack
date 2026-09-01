@@ -18,6 +18,9 @@ struct Motive : Module {
 		CV_INPUT,
 		GATE_INPUT,
 		RESET_INPUT,
+		MUT_CV_INPUT,
+		VAR_CV_INPUT,
+		SPLASH_INPUT,
 		INPUTS_LEN
 	};
 	enum OutputId {
@@ -35,6 +38,7 @@ struct Motive : Module {
 	dsp::SchmittTrigger clockTrig;
 	dsp::SchmittTrigger resetTrig;
 	dsp::SchmittTrigger gateTrig;
+	dsp::SchmittTrigger splashTrig;
 	dsp::PulseGenerator phrasePulse;
 
 	Motive() {
@@ -50,6 +54,9 @@ struct Motive : Module {
 		configInput(CV_INPUT,    "Pitch CV");
 		configInput(GATE_INPUT,  "Gate");
 		configInput(RESET_INPUT, "Reset");
+		configInput(MUT_CV_INPUT, "Mutation CV");
+		configInput(VAR_CV_INPUT, "Variation CV");
+		configInput(SPLASH_INPUT, "Splash trigger");
 
 		configOutput(CV_OUTPUT,     "Pitch CV");
 		configOutput(GATE_OUTPUT,   "Gate");
@@ -74,14 +81,18 @@ struct Motive : Module {
 		in.cv         = inputs[CV_INPUT].getVoltage();
 		in.clockEdge  = clockTrig.process(inputs[CLOCK_INPUT].getVoltage(), 0.1f, 1.f);
 		in.resetEdge  = resetTrig.process(inputs[RESET_INPUT].getVoltage(), 0.1f, 1.f);
+		in.splashEdge = splashTrig.process(inputs[SPLASH_INPUT].getVoltage(), 0.1f, 1.f);
 
 		auto gEvent = gateTrig.processEvent(inputs[GATE_INPUT].getVoltage(), 0.1f, 1.f);
 		in.gateHigh     = gateTrig.isHigh();
 		in.gateEdgeUp   = (gEvent == dsp::SchmittTrigger::TRIGGERED);
 		in.gateEdgeDown = (gEvent == dsp::SchmittTrigger::UNTRIGGERED);
 
-		in.mutation  = params[MUTATION_PARAM].getValue();
-		in.variation = params[VARIATION_PARAM].getValue();
+		float mutCv = inputs[MUT_CV_INPUT].getVoltage() / 10.f;
+		float varCv = inputs[VAR_CV_INPUT].getVoltage() / 10.f;
+
+		in.mutation  = math::clamp(params[MUTATION_PARAM].getValue()  + mutCv, 0.f, 1.f);
+		in.variation = math::clamp(params[VARIATION_PARAM].getValue() + varCv, 0.f, 1.f);
 		in.density   = params[DENSITY_PARAM].getValue();
 		in.memory    = params[MEMORY_PARAM].getValue();
 		in.follow    = params[FOLLOW_PARAM].getValue();
@@ -274,28 +285,34 @@ struct MotivePanelText : Widget {
 		const NVGcolor cOutHdr  = nvgRGB(0xd0, 0x6a, 0x38);
 		const NVGcolor cIn      = nvgRGB(0x9a, 0xa8, 0xba);
 		const NVGcolor cOut     = nvgRGB(0xe4, 0xc4, 0xa8);
+		const NVGcolor cMod     = nvgRGB(0x8c, 0x9a, 0xa8);
+		const NVGcolor cSpl     = nvgRGB(0xd0, 0x6a, 0x38);
 
 		const int centerBase = NVG_ALIGN_CENTER | NVG_ALIGN_BASELINE;
 
-		labels.push_back({35.56f, 17.5f, 7.5f, 0.60f, centerBase, cTitle,   boldFont.c_str(), "MOTIVE"});
+		labels.push_back({40.64f, 17.5f, 7.5f, 0.60f, centerBase, cTitle,   boldFont.c_str(), "MOTIVE"});
 
-		labels.push_back({14.00f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MEMORY"});
-		labels.push_back({35.56f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MUTATION"});
-		labels.push_back({57.12f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "FOLLOW"});
-		labels.push_back({24.78f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "DENSITY"});
-		labels.push_back({46.34f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "VARIATION"});
+		labels.push_back({16.00f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MEMORY"});
+		labels.push_back({40.64f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "MUTATION"});
+		labels.push_back({65.28f, 39.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "FOLLOW"});
+		labels.push_back({28.64f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "DENSITY"});
+		labels.push_back({52.64f, 63.5f, 2.3f, 0.55f, centerBase, cLabel,   boldFont.c_str(), "VARIATION"});
 
-		labels.push_back({35.56f, 84.5f, 3.4f, 3.20f, centerBase, cInHdr,  boldFont.c_str(), "IN"});
-		labels.push_back({ 9.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CLK"});
-		labels.push_back({24.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CV"});
-		labels.push_back({39.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "GATE"});
-		labels.push_back({54.00f, 103.5f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "RST"});
+		labels.push_back({16.00f, 85.0f, 2.0f, 0.35f, centerBase, cMod,     monoFont.c_str(), "MUT"});
+		labels.push_back({40.64f, 85.0f, 2.0f, 0.35f, centerBase, cMod,     monoFont.c_str(), "VAR"});
+		labels.push_back({65.28f, 85.0f, 2.0f, 0.35f, centerBase, cSpl,     monoFont.c_str(), "SPL"});
 
-		labels.push_back({35.56f, 109.5f, 3.4f, 3.20f, centerBase, cOutHdr, boldFont.c_str(), "OUT"});
-		labels.push_back({ 9.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "CV"});
-		labels.push_back({24.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "GATE"});
-		labels.push_back({39.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "ACC"});
-		labels.push_back({54.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "PHR"});
+		labels.push_back({40.64f, 93.5f, 3.0f, 3.20f, centerBase, cInHdr,   boldFont.c_str(), "IN"});
+		labels.push_back({10.50f, 105.0f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CLK"});
+		labels.push_back({30.00f, 105.0f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "CV"});
+		labels.push_back({52.00f, 105.0f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "GATE"});
+		labels.push_back({72.00f, 105.0f, 2.0f, 0.35f, centerBase, cIn,     monoFont.c_str(), "RST"});
+
+		labels.push_back({40.64f, 113.5f, 3.0f, 3.20f, centerBase, cOutHdr, boldFont.c_str(), "OUT"});
+		labels.push_back({10.50f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "CV"});
+		labels.push_back({30.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "GATE"});
+		labels.push_back({52.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "ACC"});
+		labels.push_back({72.00f, 123.5f, 2.0f, 0.35f, centerBase, cOut,    monoFont.c_str(), "PHR"});
 	}
 
 	void draw(const DrawArgs& args) override {
@@ -320,7 +337,7 @@ struct MotiveWidget : ModuleWidget {
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/Motive.svg")));
 
 		addChild(new MotivePanelText(box.size));
-		addChild(new PngImage(Vec(22.56f, 4.6f), Vec(26.0f, 2.2f),
+		addChild(new PngImage(Vec(27.64f, 4.6f), Vec(26.0f, 2.2f),
 			asset::plugin(pluginInstance, "res/wordmark.png")));
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
@@ -329,25 +346,30 @@ struct MotiveWidget : ModuleWidget {
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 		// Knobs — row 1: MEMORY, MUTATION, FOLLOW
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(14.0,  28.0)), module, Motive::MEMORY_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(35.56, 28.0)), module, Motive::MUTATION_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(57.12, 28.0)), module, Motive::FOLLOW_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(16.00, 28.0)), module, Motive::MEMORY_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(40.64, 28.0)), module, Motive::MUTATION_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(65.28, 28.0)), module, Motive::FOLLOW_PARAM));
 
 		// Knobs — row 2: DENSITY, VARIATION
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(24.78, 52.0)), module, Motive::DENSITY_PARAM));
-		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(46.34, 52.0)), module, Motive::VARIATION_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(28.64, 52.0)), module, Motive::DENSITY_PARAM));
+		addParam(createParamCentered<RoundBlackKnob>(mm2px(Vec(52.64, 52.0)), module, Motive::VARIATION_PARAM));
+
+		// CV modulation row — MUT CV, VAR CV, SPLASH trigger
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(16.00, 77.0)), module, Motive::MUT_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(40.64, 77.0)), module, Motive::VAR_CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(65.28, 77.0)), module, Motive::SPLASH_INPUT));
 
 		// Inputs — CLOCK, CV, GATE, RESET
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec( 9.0, 95.0)), module, Motive::CLOCK_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(24.0, 95.0)), module, Motive::CV_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(39.0, 95.0)), module, Motive::GATE_INPUT));
-		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(54.0, 95.0)), module, Motive::RESET_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(10.50, 97.0)), module, Motive::CLOCK_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(30.00, 97.0)), module, Motive::CV_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(52.00, 97.0)), module, Motive::GATE_INPUT));
+		addInput(createInputCentered<PJ301MPort>(mm2px(Vec(72.00, 97.0)), module, Motive::RESET_INPUT));
 
 		// Outputs — CV, GATE, ACCENT, PHRASE
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec( 9.0, 115.0)), module, Motive::CV_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(24.0, 115.0)), module, Motive::GATE_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(39.0, 115.0)), module, Motive::ACCENT_OUTPUT));
-		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(54.0, 115.0)), module, Motive::PHRASE_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(10.50, 117.0)), module, Motive::CV_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(30.00, 117.0)), module, Motive::GATE_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(52.00, 117.0)), module, Motive::ACCENT_OUTPUT));
+		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(72.00, 117.0)), module, Motive::PHRASE_OUTPUT));
 	}
 
 	void appendContextMenu(Menu* menu) override {

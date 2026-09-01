@@ -33,6 +33,7 @@ struct MotiveEngine {
 		bool  gateHigh;
 		bool  gateEdgeUp;
 		bool  gateEdgeDown;
+		bool  splashEdge;
 		float cv;
 		float sampleTime;
 

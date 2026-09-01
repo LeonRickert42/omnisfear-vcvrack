@@ -107,6 +107,31 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 		out.phraseTrigger = true;
 	}
 
+	// SPLASH forces a phrase boundary now with a boosted VARIATE.
+	if (in.splashEdge && mode == REPLAY && normalized.count > 0) {
+		history.ageAll(clamp01(in.memory));
+
+		NormalizedMotive prev = normalized;
+		Inputs boosted = in;
+		boosted.mutation = std::min(1.f, in.mutation + 0.4f);
+		applyPhraseAction(ACT_VARIATE, boosted);
+		lastAction = ACT_VARIATE;
+
+		float sim = similarity(prev, normalized);
+		float nov = 1.f - sim;
+		if (nov > 0.15f) {
+			history.push(normalized, nov, normalized.density * meanVelocity(normalized));
+		}
+
+		currentTick        = 0;
+		replayCursor       = 0;
+		replayGateOffPos   = -1.f;
+		latchedGate        = 0.f;
+		latchedAccent      = 0.f;
+		timeSinceLastTick  = 0.f;
+		out.phraseTrigger  = true;
+	}
+
 	bool phraseStart = false;
 	if (in.clockEdge) {
 		if (currentTick >= 0 && timeSinceLastTick > 1e-6f) {

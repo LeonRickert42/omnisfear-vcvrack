@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="50.8mm" height="128.5mm" viewBox="0 0 50.8 128.5">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="128.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0"    stop-color="#0a0a0e"/>
+      <stop offset="0.35" stop-color="#0f0f14"/>
+      <stop offset="0.7"  stop-color="#101015"/>
+      <stop offset="1"    stop-color="#16161c"/>
+    </linearGradient>
+    <linearGradient id="rustGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0"    stop-color="#7a3418"/>
+      <stop offset="0.5"  stop-color="#c8582a"/>
+      <stop offset="1"    stop-color="#7a3418"/>
+    </linearGradient>
+    <linearGradient id="chromeH" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0"    stop-color="#24231e"/>
+      <stop offset="0.5"  stop-color="#8a8880"/>
+      <stop offset="1"    stop-color="#24231e"/>
+    </linearGradient>
+    <radialGradient id="btnHalo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0"   stop-color="#7a3418" stop-opacity="0.65"/>
+      <stop offset="0.7" stop-color="#7a3418" stop-opacity="0.15"/>
+      <stop offset="1"   stop-color="#7a3418" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="50.8" height="128.5" fill="url(#bgGrad)"/>
+
+  <line x1="3" y1="3.4" x2="47.8" y2="3.4" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="3.9" x2="47.8" y2="3.9" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+
+  <rect x="18.4" y="16.5" width="14" height="0.7" fill="url(#rustGrad)"/>
+  <line x1="6" y1="20.5" x2="44.8" y2="20.5" stroke="#3a3934" stroke-width="0.1"/>
+
+  <!-- Knob corner marks -->
+  <circle cx="3.2"  cy="25" r="0.5" fill="#c8582a"/>
+  <circle cx="47.6" cy="25" r="0.5" fill="#c8582a"/>
+
+  <circle cx="10.50" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="40.30" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+
+  <circle cx="3.2"  cy="48" r="0.5" fill="#c8582a"/>
+  <circle cx="47.6" cy="48" r="0.5" fill="#c8582a"/>
+
+  <circle cx="25.40" cy="48" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+
+  <!-- Big button halo + bezel accent -->
+  <line x1="6" y1="63.5" x2="44.8" y2="63.5" stroke="#2a2925" stroke-width="0.1"/>
+
+  <circle cx="25.4" cy="78" r="12" fill="url(#btnHalo)"/>
+  <circle cx="25.4" cy="78" r="8"  fill="none" stroke="#c8582a" stroke-width="0.35"/>
+  <circle cx="25.4" cy="78" r="8.6" fill="none" stroke="#40201a" stroke-width="0.2"/>
+
+  <!-- IN / OUT dividers -->
+  <line x1="3" y1="88.5" x2="47.8" y2="88.5" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="89.0" x2="47.8" y2="89.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+
+  <!-- IN section (cool) -->
+  <rect x="2" y="90.5" width="46.8" height="17.5" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
+  <rect x="2" y="90.5" width="46.8" height="17.5" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
+
+  <circle cx="10.50" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+
+  <!-- Full-width rust divider between IN and OUT -->
+  <rect x="4" y="109.0" width="42.8" height="0.6" fill="url(#rustGrad)"/>
+
+  <!-- OUT section (warm) -->
+  <rect x="2" y="110.0" width="46.8" height="15.0" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
+  <rect x="2" y="110.0" width="46.8" height="15.0" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
+
+  <circle cx="10.50" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="25.40" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="40.30" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+
+  <line x1="3" y1="125.6" x2="47.8" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="126.1" x2="47.8" y2="126.1" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+</svg>

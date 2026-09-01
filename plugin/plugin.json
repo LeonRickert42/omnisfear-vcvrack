@@ -1,7 +1,7 @@
 {
   "slug": "Omnisfear",
   "name": "Project Omnisfear",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "GPL-3.0-or-later",
   "brand": "Omnisfear",
   "author": "Project Omnisfear",
@@ -19,6 +19,15 @@
       "description": "Musical behavior engine — motive capture, mutation, memory, recall.",
       "tags": [
         "Sequencer",
+        "Random"
+      ]
+    },
+    {
+      "slug": "Splash",
+      "name": "OMNISFEAR SPLASH",
+      "description": "Performance gesture — throws a coordinated musical change at MOTIVE.",
+      "tags": [
+        "Utility",
         "Random"
       ]
     }
