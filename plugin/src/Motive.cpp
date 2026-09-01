@@ -55,6 +55,17 @@ struct Motive : Module {
 		configOutput(GATE_OUTPUT,   "Gate");
 		configOutput(ACCENT_OUTPUT, "Accent");
 		configOutput(PHRASE_OUTPUT, "Phrase");
+
+		engine.rng.seed(random::u64());
+	}
+
+	void onReset() override {
+		engine.reset();
+		engine.clearMemory();
+	}
+
+	void onRandomize() override {
+		engine.rng.seed(random::u64());
 	}
 
 	void process(const ProcessArgs& args) override {
@@ -86,15 +97,130 @@ struct Motive : Module {
 		outputs[PHRASE_OUTPUT].setVoltage(phrasePulse.process(args.sampleTime) ? 10.f : 0.f);
 	}
 
+	static json_t* eventsToJson(const omnisfear::NormalizedEvent* events, int count) {
+		json_t* arr = json_array();
+		for (int i = 0; i < count; i++) {
+			json_t* e = json_object();
+			json_object_set_new(e, "s", json_real(events[i].startPos));
+			json_object_set_new(e, "g", json_real(events[i].gateLen));
+			json_object_set_new(e, "p", json_real(events[i].pitchInterval));
+			json_object_set_new(e, "v", json_real(events[i].velocity));
+			json_array_append_new(arr, e);
+		}
+		return arr;
+	}
+
+	static void eventsFromJson(json_t* arr, omnisfear::NormalizedEvent* events, int& count) {
+		count = 0;
+		if (!arr || !json_is_array(arr)) return;
+		size_t n = json_array_size(arr);
+		if (int(n) > omnisfear::NormalizedMotive::MAX_EVENTS)
+			n = omnisfear::NormalizedMotive::MAX_EVENTS;
+		for (size_t i = 0; i < n; i++) {
+			json_t* e = json_array_get(arr, i);
+			if (!e) continue;
+			omnisfear::NormalizedEvent& ne = events[count++];
+			ne.startPos      = json_number_value(json_object_get(e, "s"));
+			ne.gateLen       = json_number_value(json_object_get(e, "g"));
+			ne.pitchInterval = json_number_value(json_object_get(e, "p"));
+			ne.velocity      = json_number_value(json_object_get(e, "v"));
+		}
+	}
+
+	static json_t* motiveToJson(const omnisfear::NormalizedMotive& m) {
+		json_t* o = json_object();
+		json_object_set_new(o, "anchor",    json_real(m.anchorPitch));
+		json_object_set_new(o, "density",   json_real(m.density));
+		json_object_set_new(o, "direction", json_integer(m.direction));
+		json_object_set_new(o, "grid",      json_integer(m.rhythmGrid));
+		json_object_set_new(o, "events",    eventsToJson(m.events, m.count));
+		return o;
+	}
+
+	static void motiveFromJson(json_t* o, omnisfear::NormalizedMotive& m) {
+		m.count = 0;
+		m.anchorPitch = 0.f;
+		m.density = 0.f;
+		m.direction = 0;
+		m.rhythmGrid = 0;
+		if (!o) return;
+		if (json_t* j = json_object_get(o, "anchor"))    m.anchorPitch = json_number_value(j);
+		if (json_t* j = json_object_get(o, "density"))   m.density     = json_number_value(j);
+		if (json_t* j = json_object_get(o, "direction")) m.direction   = int(json_integer_value(j));
+		if (json_t* j = json_object_get(o, "grid"))      m.rhythmGrid  = uint16_t(json_integer_value(j));
+		eventsFromJson(json_object_get(o, "events"), m.events, m.count);
+	}
+
 	json_t* dataToJson() override {
 		json_t* root = json_object();
-		// TODO: serialize seed, motive memory, phrase state
+
+		json_object_set_new(root, "rngState", json_integer(int64_t(engine.rng.state)));
+		json_object_set_new(root, "mode",     json_integer(int(engine.mode)));
+		json_object_set_new(root, "tickDur",  json_real(engine.estTickDurationS));
+
+		json_object_set_new(root, "motive",   motiveToJson(engine.normalized));
+
+		json_t* hist = json_array();
+		for (int i = 0; i < engine.history.count; i++) {
+			const auto& mm = engine.history.entries[i];
+			json_t* o = json_object();
+			json_object_set_new(o, "m",   motiveToJson(mm.motive));
+			json_object_set_new(o, "age", json_real(mm.age));
+			json_object_set_new(o, "en",  json_real(mm.energy));
+			json_object_set_new(o, "nv",  json_real(mm.novelty));
+			json_object_set_new(o, "u",   json_integer(mm.usage));
+			json_array_append_new(hist, o);
+		}
+		json_object_set_new(root, "history",    hist);
+		json_object_set_new(root, "historyNext", json_integer(engine.history.nextWrite));
+
 		return root;
 	}
 
 	void dataFromJson(json_t* root) override {
-		// TODO: restore seed, motive memory, phrase state
-		(void) root;
+		if (!root) return;
+
+		if (json_t* j = json_object_get(root, "rngState"))
+			engine.rng.state = uint64_t(json_integer_value(j));
+		if (json_t* j = json_object_get(root, "mode"))
+			engine.mode = (json_integer_value(j) == 0) ? omnisfear::MotiveEngine::CAPTURE : omnisfear::MotiveEngine::REPLAY;
+		if (json_t* j = json_object_get(root, "tickDur"))
+			engine.estTickDurationS = json_number_value(j);
+
+		motiveFromJson(json_object_get(root, "motive"), engine.normalized);
+
+		engine.history.clear();
+		json_t* hist = json_object_get(root, "history");
+		if (hist && json_is_array(hist)) {
+			size_t n = json_array_size(hist);
+			if (int(n) > omnisfear::MotiveEngine::MEMORY_CAP)
+				n = omnisfear::MotiveEngine::MEMORY_CAP;
+			for (size_t i = 0; i < n; i++) {
+				json_t* o = json_array_get(hist, i);
+				if (!o) continue;
+				auto& mm = engine.history.entries[engine.history.count];
+				motiveFromJson(json_object_get(o, "m"), mm.motive);
+				mm.age     = json_number_value(json_object_get(o, "age"));
+				mm.energy  = json_number_value(json_object_get(o, "en"));
+				mm.novelty = json_number_value(json_object_get(o, "nv"));
+				mm.usage   = int(json_integer_value(json_object_get(o, "u")));
+				engine.history.count++;
+			}
+		}
+		if (json_t* j = json_object_get(root, "historyNext")) {
+			int nw = int(json_integer_value(j));
+			if (nw < 0) nw = 0;
+			if (nw >= omnisfear::MotiveEngine::MEMORY_CAP) nw = 0;
+			engine.history.nextWrite = nw;
+		}
+
+		// Force resync with next clock — old tick counters are no longer valid.
+		engine.currentTick        = -1;
+		engine.timeSinceLastTick  = 0.f;
+		engine.replayCursor       = 0;
+		engine.replayGateOffPos   = -1.f;
+		engine.latchedGate        = 0.f;
+		engine.latchedAccent      = 0.f;
 	}
 };
 
@@ -222,6 +348,23 @@ struct MotiveWidget : ModuleWidget {
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(24.0, 115.0)), module, Motive::GATE_OUTPUT));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(39.0, 115.0)), module, Motive::ACCENT_OUTPUT));
 		addOutput(createOutputCentered<PJ301MPort>(mm2px(Vec(54.0, 115.0)), module, Motive::PHRASE_OUTPUT));
+	}
+
+	void appendContextMenu(Menu* menu) override {
+		Motive* m = dynamic_cast<Motive*>(module);
+		if (!m) return;
+
+		menu->addChild(new MenuSeparator);
+
+		menu->addChild(createMenuItem("New seed", "", [m]() {
+			m->engine.rng.seed(random::u64());
+		}));
+		menu->addChild(createMenuItem("Recapture from input", "", [m]() {
+			m->engine.reset();
+		}));
+		menu->addChild(createMenuItem("Clear memory", "", [m]() {
+			m->engine.clearMemory();
+		}));
 	}
 };
 

@@ -1,8 +1,23 @@
 #include "MotiveEngine.hpp"
 #include "MutationPolicy.hpp"
+#include "Mutations.hpp"
 #include <algorithm>
+#include <cmath>
 
 namespace omnisfear {
+
+static float clamp01(float x) {
+	if (x < 0.f) return 0.f;
+	if (x > 1.f) return 1.f;
+	return x;
+}
+
+static float meanVelocity(const NormalizedMotive& m) {
+	if (m.count == 0) return 0.f;
+	float s = 0.f;
+	for (int i = 0; i < m.count; i++) s += m.events[i].velocity;
+	return s / float(m.count);
+}
 
 void MotiveEngine::reset() {
 	mode = CAPTURE;
@@ -12,6 +27,7 @@ void MotiveEngine::reset() {
 	normalized.density = 0.f;
 	normalized.direction = 0;
 	normalized.rhythmGrid = 0;
+	lastAction        = ACT_CONTINUE;
 	currentTick       = -1;
 	timeSinceLastTick = 0.f;
 	pendingGateStart  = 0.f;
@@ -22,6 +38,65 @@ void MotiveEngine::reset() {
 	latchedCV     = 0.f;
 	latchedGate   = 0.f;
 	latchedAccent = 0.f;
+}
+
+void MotiveEngine::clearMemory() {
+	history.clear();
+}
+
+MotiveEngine::PhraseAction MotiveEngine::decidePhraseAction(const Inputs& in) {
+	const float variation = clamp01(in.variation);
+	const float memory    = clamp01(in.memory);
+	const float follow    = clamp01(in.follow);
+
+	if (variation < 1e-3f || rng.uniform() > variation) {
+		return ACT_CONTINUE;
+	}
+
+	float pRecall = memory * 0.7f;
+	if (history.count == 0) pRecall = 0.f;
+
+	float pMutate  = follow * (1.f - pRecall);
+	float pVariate = 1.f - pRecall - pMutate;
+	if (pVariate < 0.f) pVariate = 0.f;
+
+	float r = rng.uniform();
+	if (r < pRecall)             return ACT_RECALL;
+	if (r < pRecall + pMutate)   return ACT_MUTATE;
+	return ACT_VARIATE;
+}
+
+void MotiveEngine::applyPhraseAction(PhraseAction a, const Inputs& in) {
+	const float mutation = clamp01(in.mutation);
+	const float density  = clamp01(in.density);
+	const float follow   = clamp01(in.follow);
+
+	switch (a) {
+		case ACT_CONTINUE:
+			break;
+
+		case ACT_MUTATE:
+			applyMutationCycle(normalized, rng, mutation, density);
+			break;
+
+		case ACT_VARIATE: {
+			// Drift further while remaining structurally related. Extra ops,
+			// stronger transformations, capped at 1.0.
+			float m = mutation + 0.35f;
+			if (m > 1.f) m = 1.f;
+			applyMutationCycle(normalized, rng, m, density);
+			break;
+		}
+
+		case ACT_RECALL: {
+			int idx = history.pickWeighted(rng, normalized, follow);
+			if (idx >= 0) {
+				normalized = history.entries[idx].motive;
+				history.entries[idx].usage++;
+			}
+			break;
+		}
+	}
 }
 
 MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
@@ -53,12 +128,28 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 					buffer.sortByStart();
 					normalize(buffer, normalized);
 					mode = REPLAY;
+					if (normalized.count > 0) {
+						history.push(normalized, 0.f, normalized.density * meanVelocity(normalized));
+					}
+					lastAction = ACT_CONTINUE;
 				}
 				else {
-					if (in.mutation > 0.01f && in.variation > 0.f && rng.uniform() < in.variation) {
-						applyMutationCycle(normalized, rng, in.mutation, in.density);
+					history.ageAll(clamp01(in.memory));
+
+					PhraseAction a = decidePhraseAction(in);
+					NormalizedMotive prev = normalized;
+					applyPhraseAction(a, in);
+					lastAction = a;
+
+					if (a == ACT_MUTATE || a == ACT_VARIATE) {
+						float sim = similarity(prev, normalized);
+						float nov = 1.f - sim;
+						if (nov > 0.15f && normalized.count > 0) {
+							history.push(normalized, nov, normalized.density * meanVelocity(normalized));
+						}
 					}
 				}
+
 				replayCursor     = 0;
 				replayGateOffPos = -1.f;
 				latchedGate      = 0.f;
