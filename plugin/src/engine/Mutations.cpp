@@ -114,10 +114,26 @@ void mutate_addNeighbor(NormalizedMotive& m, Rng& rng, bool preservePitch) {
 	const NormalizedEvent& src = m.events[idx];
 	NormalizedEvent n;
 
-	float dt = 0.1f + rng.uniform() * 0.4f;
-	n.startPos = src.startPos + dt;
 	const float T = float(NormalizedMotive::PHRASE_TICKS);
-	if (n.startPos >= T) n.startPos -= T;
+
+	// Ghost hit lands on a full tick offset so it sits on the grid.
+	// Try 2, then 1, then 3, then 4 ticks after the source; skip if the slot
+	// is already occupied so we don't stack hits on the same beat.
+	static const int kOffsets[4] = {2, 1, 3, 4};
+	int startIdx = int(rng.next() % 4u);
+	float placed = -1.f;
+	for (int t = 0; t < 4; t++) {
+		int off = kOffsets[(startIdx + t) & 3];
+		float p = std::fmod(src.startPos + float(off), T);
+		int slot = int(p);
+		bool occupied = false;
+		for (int i = 0; i < m.count; i++) {
+			if (int(m.events[i].startPos) == slot) { occupied = true; break; }
+		}
+		if (!occupied) { placed = p; break; }
+	}
+	if (placed < 0.f) return;
+	n.startPos = placed;
 
 	n.gateLen = 0.5f + rng.uniform() * 0.5f;
 

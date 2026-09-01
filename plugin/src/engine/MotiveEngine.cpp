@@ -36,6 +36,7 @@ void MotiveEngine::reset() {
 	normalized.rhythmGrid = 0;
 	snapshot.count = 0;
 	hasSnapshot = false;
+	baseEventCount = 0;
 	lastAction        = ACT_CONTINUE;
 	currentTick       = -1;
 	timeSinceLastTick = 0.f;
@@ -51,6 +52,15 @@ void MotiveEngine::reset() {
 
 void MotiveEngine::clearMemory() {
 	history.clear();
+}
+
+void MotiveEngine::enforceEventCap() {
+	if (baseEventCount <= 0) return;
+	int cap = int(float(baseEventCount) * 1.5f + 0.5f);
+	if (cap < baseEventCount + 1) cap = baseEventCount + 1;
+	while (normalized.count > cap) {
+		mutate_removeEvent(normalized, rng);
+	}
 }
 
 MotiveEngine::PhraseAction MotiveEngine::decidePhraseAction(const Inputs& in) {
@@ -127,6 +137,7 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 		Inputs boosted = in;
 		boosted.mutation = std::min(1.f, in.mutation + 0.4f);
 		applyPhraseAction(ACT_VARIATE, boosted);
+		enforceEventCap();
 		lastAction = ACT_VARIATE;
 
 		float sim = similarity(prev, normalized);
@@ -181,6 +192,7 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 					normalize(buffer, normalized);
 					mode = REPLAY;
 					if (normalized.count > 0) {
+						baseEventCount = normalized.count;
 						history.push(normalized, 0.f, normalized.density * meanVelocity(normalized));
 					}
 					lastAction = ACT_CONTINUE;
@@ -191,6 +203,7 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 					PhraseAction a = decidePhraseAction(in);
 					NormalizedMotive prev = normalized;
 					applyPhraseAction(a, in);
+					enforceEventCap();
 					lastAction = a;
 
 					if (a == ACT_MUTATE || a == ACT_VARIATE) {

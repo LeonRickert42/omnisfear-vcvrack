@@ -176,6 +176,7 @@ struct Motive : Module {
 		json_object_set_new(root, "rngState", json_integer(int64_t(engine.rng.state)));
 		json_object_set_new(root, "mode",     json_integer(int(engine.mode)));
 		json_object_set_new(root, "tickDur",  json_real(engine.estTickDurationS));
+		json_object_set_new(root, "baseN",    json_integer(engine.baseEventCount));
 
 		json_object_set_new(root, "motive",   motiveToJson(engine.normalized));
 
@@ -205,6 +206,9 @@ struct Motive : Module {
 			engine.mode = (json_integer_value(j) == 0) ? omnisfear::MotiveEngine::CAPTURE : omnisfear::MotiveEngine::REPLAY;
 		if (json_t* j = json_object_get(root, "tickDur"))
 			engine.estTickDurationS = json_number_value(j);
+
+		if (json_t* j = json_object_get(root, "baseN"))
+			engine.baseEventCount = int(json_integer_value(j));
 
 		motiveFromJson(json_object_get(root, "motive"), engine.normalized);
 

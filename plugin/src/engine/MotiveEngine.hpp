@@ -61,6 +61,8 @@ struct MotiveEngine {
 	NormalizedMotive snapshot;
 	bool hasSnapshot = false;
 
+	int baseEventCount = 0;  // captured motive size, used to cap ghost accumulation
+
 	PhraseAction lastAction = ACT_CONTINUE;
 
 	int   currentTick        = -1;
@@ -85,6 +87,9 @@ struct MotiveEngine {
 	// Exposed for tests and for the phrase-boundary logic in process().
 	PhraseAction decidePhraseAction(const Inputs& in);
 	void         applyPhraseAction(PhraseAction a, const Inputs& in);
+
+	// Removes ghost events beyond ~1.5x the captured motive size.
+	void enforceEventCap();
 };
 
 } // namespace omnisfear
