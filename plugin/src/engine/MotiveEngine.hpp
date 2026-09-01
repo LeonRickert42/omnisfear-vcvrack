@@ -25,6 +25,12 @@ struct MotiveEngine {
 		bool  gateEdgeDown;  // GATE falling edge this frame
 		float cv;            // CV IN volts
 		float sampleTime;    // seconds per sample
+
+		float mutation  = 0.f;
+		float variation = 0.f;
+		float density   = 0.5f;
+		float memory    = 0.5f;
+		float follow    = 0.5f;
 	};
 
 	struct Outputs {

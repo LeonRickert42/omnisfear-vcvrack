@@ -1,4 +1,5 @@
 #include "MotiveEngine.hpp"
+#include "MutationPolicy.hpp"
 #include <algorithm>
 
 namespace omnisfear {
@@ -52,6 +53,11 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 					buffer.sortByStart();
 					normalize(buffer, normalized);
 					mode = REPLAY;
+				}
+				else {
+					if (in.mutation > 0.01f && in.variation > 0.f && rng.uniform() < in.variation) {
+						applyMutationCycle(normalized, rng, in.mutation, in.density);
+					}
 				}
 				replayCursor     = 0;
 				replayGateOffPos = -1.f;

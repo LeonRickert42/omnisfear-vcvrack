@@ -69,6 +69,12 @@ struct Motive : Module {
 		in.gateEdgeUp   = (gEvent == dsp::SchmittTrigger::TRIGGERED);
 		in.gateEdgeDown = (gEvent == dsp::SchmittTrigger::UNTRIGGERED);
 
+		in.mutation  = params[MUTATION_PARAM].getValue();
+		in.variation = params[VARIATION_PARAM].getValue();
+		in.density   = params[DENSITY_PARAM].getValue();
+		in.memory    = params[MEMORY_PARAM].getValue();
+		in.follow    = params[FOLLOW_PARAM].getValue();
+
 		auto outE = engine.process(in);
 
 		if (outE.phraseTrigger)
