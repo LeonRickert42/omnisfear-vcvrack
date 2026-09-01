@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="50.8mm" height="128.5mm" viewBox="0 0 50.8 128.5">
+<svg xmlns="http://www.w3.org/2000/svg" width="60.96mm" height="128.5mm" viewBox="0 0 60.96 128.5">
   <defs>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="128.5" gradientUnits="userSpaceOnUse">
       <stop offset="0"    stop-color="#0a0a0e"/>
@@ -18,60 +18,65 @@
       <stop offset="1"    stop-color="#24231e"/>
     </linearGradient>
     <radialGradient id="btnHalo" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0"   stop-color="#7a3418" stop-opacity="0.65"/>
-      <stop offset="0.7" stop-color="#7a3418" stop-opacity="0.15"/>
+      <stop offset="0"   stop-color="#7a3418" stop-opacity="0.75"/>
+      <stop offset="0.7" stop-color="#7a3418" stop-opacity="0.20"/>
       <stop offset="1"   stop-color="#7a3418" stop-opacity="0"/>
     </radialGradient>
   </defs>
 
-  <rect width="50.8" height="128.5" fill="url(#bgGrad)"/>
+  <rect width="60.96" height="128.5" fill="url(#bgGrad)"/>
 
-  <line x1="3" y1="3.4" x2="47.8" y2="3.4" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="3.9" x2="47.8" y2="3.9" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <line x1="3" y1="3.4" x2="57.96" y2="3.4" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="3.9" x2="57.96" y2="3.9" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 
-  <rect x="18.4" y="16.5" width="14" height="0.7" fill="url(#rustGrad)"/>
-  <line x1="6" y1="20.5" x2="44.8" y2="20.5" stroke="#3a3934" stroke-width="0.1"/>
+  <rect x="23.48" y="16.5" width="14" height="0.7" fill="url(#rustGrad)"/>
+  <line x1="6" y1="20.5" x2="54.96" y2="20.5" stroke="#3a3934" stroke-width="0.1"/>
 
-  <!-- Knob corner marks -->
-  <circle cx="3.2"  cy="25" r="0.5" fill="#c8582a"/>
-  <circle cx="47.6" cy="25" r="0.5" fill="#c8582a"/>
+  <circle cx="3.2"   cy="25" r="0.5" fill="#c8582a"/>
+  <circle cx="57.76" cy="25" r="0.5" fill="#c8582a"/>
 
-  <circle cx="10.50" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
-  <circle cx="40.30" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="14.00" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="46.96" cy="25" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
 
-  <circle cx="3.2"  cy="48" r="0.5" fill="#c8582a"/>
-  <circle cx="47.6" cy="48" r="0.5" fill="#c8582a"/>
+  <circle cx="3.2"   cy="45" r="0.5" fill="#c8582a"/>
+  <circle cx="57.76" cy="45" r="0.5" fill="#c8582a"/>
 
-  <circle cx="25.40" cy="48" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="14.00" cy="45" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="46.96" cy="45" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
 
-  <!-- Big button halo + bezel accent -->
-  <line x1="6" y1="63.5" x2="44.8" y2="63.5" stroke="#2a2925" stroke-width="0.1"/>
+  <line x1="6" y1="60.0" x2="54.96" y2="60.0" stroke="#2a2925" stroke-width="0.1"/>
 
-  <circle cx="25.4" cy="78" r="12" fill="url(#btnHalo)"/>
-  <circle cx="25.4" cy="78" r="8"  fill="none" stroke="#c8582a" stroke-width="0.35"/>
-  <circle cx="25.4" cy="78" r="8.6" fill="none" stroke="#40201a" stroke-width="0.2"/>
+  <!-- Big button halo -->
+  <circle cx="30.48" cy="68" r="14" fill="url(#btnHalo)"/>
+  <circle cx="30.48" cy="68" r="9"  fill="none" stroke="#c8582a" stroke-width="0.4"/>
+  <circle cx="30.48" cy="68" r="9.7" fill="none" stroke="#40201a" stroke-width="0.2"/>
 
-  <!-- IN / OUT dividers -->
-  <line x1="3" y1="88.5" x2="47.8" y2="88.5" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="89.0" x2="47.8" y2="89.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <!-- Reject button area -->
+  <circle cx="30.48" cy="85" r="4.6" fill="none" stroke="#4a4939" stroke-width="0.25"/>
 
-  <!-- IN section (cool) -->
-  <rect x="2" y="90.5" width="46.8" height="17.5" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
-  <rect x="2" y="90.5" width="46.8" height="17.5" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
+  <!-- Divider between button block and IN -->
+  <line x1="3" y1="92.5" x2="57.96" y2="92.5" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="93.0" x2="57.96" y2="93.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 
-  <circle cx="10.50" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <!-- IN section (cool tint) -->
+  <rect x="2" y="94.5" width="56.96" height="12.0" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
+  <rect x="2" y="94.5" width="56.96" height="12.0" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
 
-  <!-- Full-width rust divider between IN and OUT -->
-  <rect x="4" y="109.0" width="42.8" height="0.6" fill="url(#rustGrad)"/>
+  <circle cx="10.16" cy="98" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
 
-  <!-- OUT section (warm) -->
-  <rect x="2" y="110.0" width="46.8" height="15.0" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
-  <rect x="2" y="110.0" width="46.8" height="15.0" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
+  <!-- Rust divider between IN and OUT -->
+  <rect x="4" y="107.5" width="52.96" height="0.6" fill="url(#rustGrad)"/>
 
-  <circle cx="10.50" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
-  <circle cx="25.40" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
-  <circle cx="40.30" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <!-- OUT section (warm tint) -->
+  <rect x="2" y="108.5" width="56.96" height="16.5" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
+  <rect x="2" y="108.5" width="56.96" height="16.5" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
 
-  <line x1="3" y1="125.6" x2="47.8" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="126.1" x2="47.8" y2="126.1" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <circle cx="10.16" cy="118.5" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="20.32" cy="118.5" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="30.48" cy="118.5" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="40.64" cy="118.5" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="50.80" cy="118.5" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+
+  <line x1="3" y1="125.6" x2="57.96" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="126.1" x2="57.96" y2="126.1" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 </svg>

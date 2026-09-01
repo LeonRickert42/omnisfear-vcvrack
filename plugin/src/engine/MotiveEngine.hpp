@@ -34,6 +34,7 @@ struct MotiveEngine {
 		bool  gateEdgeUp;
 		bool  gateEdgeDown;
 		bool  splashEdge;
+		bool  prevEdge;
 		float cv;
 		float sampleTime;
 
@@ -56,6 +57,9 @@ struct MotiveEngine {
 	NormalizedMotive normalized;
 	MotiveHistory<MEMORY_CAP> history;
 	Rng rng;
+
+	NormalizedMotive snapshot;
+	bool hasSnapshot = false;
 
 	PhraseAction lastAction = ACT_CONTINUE;
 

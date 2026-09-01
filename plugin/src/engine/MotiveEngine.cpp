@@ -27,6 +27,8 @@ void MotiveEngine::reset() {
 	normalized.density = 0.f;
 	normalized.direction = 0;
 	normalized.rhythmGrid = 0;
+	snapshot.count = 0;
+	hasSnapshot = false;
 	lastAction        = ACT_CONTINUE;
 	currentTick       = -1;
 	timeSinceLastTick = 0.f;
@@ -109,6 +111,9 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 
 	// SPLASH forces a phrase boundary now with a boosted VARIATE.
 	if (in.splashEdge && mode == REPLAY && normalized.count > 0) {
+		snapshot = normalized;
+		hasSnapshot = true;
+
 		history.ageAll(clamp01(in.memory));
 
 		NormalizedMotive prev = normalized;
@@ -122,6 +127,21 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 		if (nov > 0.15f) {
 			history.push(normalized, nov, normalized.density * meanVelocity(normalized));
 		}
+
+		currentTick        = 0;
+		replayCursor       = 0;
+		replayGateOffPos   = -1.f;
+		latchedGate        = 0.f;
+		latchedAccent      = 0.f;
+		timeSinceLastTick  = 0.f;
+		out.phraseTrigger  = true;
+	}
+
+	// PREV restores the last snapshot (single-level undo).
+	if (in.prevEdge && hasSnapshot && mode == REPLAY) {
+		normalized = snapshot;
+		hasSnapshot = false;
+		lastAction = ACT_RECALL;
 
 		currentTick        = 0;
 		replayCursor       = 0;

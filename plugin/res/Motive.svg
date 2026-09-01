@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="81.28mm" height="128.5mm" viewBox="0 0 81.28 128.5">
+<svg xmlns="http://www.w3.org/2000/svg" width="91.44mm" height="128.5mm" viewBox="0 0 91.44 128.5">
   <defs>
     <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="128.5" gradientUnits="userSpaceOnUse">
       <stop offset="0"    stop-color="#0a0a0e"/>
@@ -19,62 +19,63 @@
     </linearGradient>
   </defs>
 
-  <rect width="81.28" height="128.5" fill="url(#bgGrad)"/>
+  <rect width="91.44" height="128.5" fill="url(#bgGrad)"/>
 
-  <line x1="3" y1="3.4" x2="78.28" y2="3.4" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="3.9" x2="78.28" y2="3.9" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <line x1="3" y1="3.4" x2="88.44" y2="3.4" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="3.9" x2="88.44" y2="3.9" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 
-  <rect x="33.64" y="20.2" width="14" height="0.7" fill="url(#rustGrad)"/>
-
-  <line x1="6" y1="25.0" x2="75.28" y2="25.0" stroke="#3a3934" stroke-width="0.1"/>
+  <rect x="38.72" y="20.2" width="14" height="0.7" fill="url(#rustGrad)"/>
+  <line x1="6" y1="25.0" x2="85.44" y2="25.0" stroke="#3a3934" stroke-width="0.1"/>
 
   <circle cx="3.2"   cy="28" r="0.5" fill="#c8582a"/>
-  <circle cx="78.08" cy="28" r="0.5" fill="#c8582a"/>
+  <circle cx="88.24" cy="28" r="0.5" fill="#c8582a"/>
 
-  <circle cx="16.00" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
-  <circle cx="40.64" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
-  <circle cx="65.28" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="18.00" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="45.72" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="73.44" cy="28" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
 
   <circle cx="3.2"   cy="52" r="0.5" fill="#c8582a"/>
-  <circle cx="78.08" cy="52" r="0.5" fill="#c8582a"/>
+  <circle cx="88.24" cy="52" r="0.5" fill="#c8582a"/>
 
-  <circle cx="28.64" cy="52" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
-  <circle cx="52.64" cy="52" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="32.00" cy="52" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
+  <circle cx="59.44" cy="52" r="7.5" fill="none" stroke="#1c1b17" stroke-width="0.25"/>
 
-  <!-- MOD / CV row (thin divider above, tiny brand mark below) -->
-  <line x1="6" y1="67.5" x2="75.28" y2="67.5" stroke="#2a2925" stroke-width="0.1"/>
-  <rect x="2" y="69.5" width="77.28" height="15.5" rx="1.0" ry="1.0" fill="#0e1013" opacity="0.55"/>
-  <rect x="2" y="69.5" width="77.28" height="15.5" rx="1.0" ry="1.0" fill="none" stroke="#252a30" stroke-width="0.15"/>
+  <!-- CV/MOD row (5 ports) -->
+  <line x1="6" y1="67.5" x2="85.44" y2="67.5" stroke="#2a2925" stroke-width="0.1"/>
+  <rect x="2" y="69.5" width="87.44" height="15.5" rx="1.0" ry="1.0" fill="#0e1013" opacity="0.55"/>
+  <rect x="2" y="69.5" width="87.44" height="15.5" rx="1.0" ry="1.0" fill="none" stroke="#252a30" stroke-width="0.15"/>
 
-  <circle cx="16.00" cy="77" r="5.0" fill="none" stroke="#2f3540" stroke-width="0.28"/>
-  <circle cx="40.64" cy="77" r="5.0" fill="none" stroke="#2f3540" stroke-width="0.28"/>
-  <circle cx="65.28" cy="77" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="14.44" cy="77" r="5.0" fill="none" stroke="#2f3540" stroke-width="0.28"/>
+  <circle cx="30.08" cy="77" r="5.0" fill="none" stroke="#2f3540" stroke-width="0.28"/>
+  <circle cx="45.72" cy="77" r="5.0" fill="none" stroke="#2f3540" stroke-width="0.28"/>
+  <circle cx="61.36" cy="77" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="77.00" cy="77" r="5.0" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
 
   <!-- Divider between mod row and IN -->
-  <line x1="3" y1="87.5" x2="78.28" y2="87.5" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="88.0" x2="78.28" y2="88.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <line x1="3" y1="87.5" x2="88.44" y2="87.5" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="88.0" x2="88.44" y2="88.0" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 
   <!-- IN section (cool tint) -->
-  <rect x="2" y="89.5" width="77.28" height="17.5" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
-  <rect x="2" y="89.5" width="77.28" height="17.5" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
+  <rect x="2" y="89.5" width="87.44" height="17.5" rx="1.2" ry="1.2" fill="#0d1219" opacity="0.55"/>
+  <rect x="2" y="89.5" width="87.44" height="17.5" rx="1.2" ry="1.2" fill="none" stroke="#252a33" stroke-width="0.18"/>
 
-  <circle cx="10.50" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
-  <circle cx="30.00" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
-  <circle cx="52.00" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
-  <circle cx="72.00" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="12.00" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="34.00" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="57.44" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
+  <circle cx="79.44" cy="97" r="5.2" fill="none" stroke="#2a3340" stroke-width="0.28"/>
 
-  <!-- Full-width rust divider between IN and OUT -->
-  <rect x="4" y="108.0" width="73.28" height="0.6" fill="url(#rustGrad)"/>
+  <!-- Rust divider between IN and OUT -->
+  <rect x="4" y="108.0" width="83.44" height="0.6" fill="url(#rustGrad)"/>
 
   <!-- OUT section (warm tint) -->
-  <rect x="2" y="109.0" width="77.28" height="15.0" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
-  <rect x="2" y="109.0" width="77.28" height="15.0" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
+  <rect x="2" y="109.0" width="87.44" height="15.0" rx="1.2" ry="1.2" fill="#1a0e08" opacity="0.60"/>
+  <rect x="2" y="109.0" width="87.44" height="15.0" rx="1.2" ry="1.2" fill="none" stroke="#3a221a" stroke-width="0.18"/>
 
-  <circle cx="10.50" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
-  <circle cx="30.00" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
-  <circle cx="52.00" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
-  <circle cx="72.00" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="12.00" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="34.00" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="57.44" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
+  <circle cx="79.44" cy="117" r="5.2" fill="none" stroke="#5a2f1e" stroke-width="0.28"/>
 
-  <line x1="3" y1="125.6" x2="78.28" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>
-  <line x1="3" y1="126.1" x2="78.28" y2="126.1" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
+  <line x1="3" y1="125.6" x2="88.44" y2="125.6" stroke="url(#chromeH)" stroke-width="0.18"/>
+  <line x1="3" y1="126.1" x2="88.44" y2="126.1" stroke="#000000" stroke-width="0.12" opacity="0.9"/>
 </svg>
