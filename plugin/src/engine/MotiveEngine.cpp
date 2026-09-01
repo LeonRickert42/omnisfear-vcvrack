@@ -6,6 +6,11 @@ namespace omnisfear {
 void MotiveEngine::reset() {
 	mode = CAPTURE;
 	buffer.clear();
+	normalized.count = 0;
+	normalized.anchorPitch = 0.f;
+	normalized.density = 0.f;
+	normalized.direction = 0;
+	normalized.rhythmGrid = 0;
 	currentTick       = -1;
 	timeSinceLastTick = 0.f;
 	pendingGateStart  = 0.f;
@@ -45,6 +50,7 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 
 				if (mode == CAPTURE) {
 					buffer.sortByStart();
+					normalize(buffer, normalized);
 					mode = REPLAY;
 				}
 				replayCursor     = 0;
@@ -91,9 +97,9 @@ MotiveEngine::Outputs MotiveEngine::process(const Inputs& in) {
 		latchedAccent = 0.f;
 	}
 	else {
-		while (replayCursor < buffer.count && buffer.events[replayCursor].startPos <= phrasePos + 1e-5f) {
-			const MotiveEvent& e = buffer.events[replayCursor];
-			latchedCV        = e.pitch;
+		while (replayCursor < normalized.count && normalized.events[replayCursor].startPos <= phrasePos + 1e-5f) {
+			const NormalizedEvent& e = normalized.events[replayCursor];
+			latchedCV        = normalized.anchorPitch + e.pitchInterval;
 			latchedGate      = 10.f;
 			latchedAccent    = e.velocity * 10.f;
 			replayGateOffPos = e.startPos + e.gateLen;

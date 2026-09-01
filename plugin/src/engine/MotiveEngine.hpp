@@ -1,6 +1,7 @@
 #pragma once
 #include "MotiveEvent.hpp"
 #include "PhraseBuffer.hpp"
+#include "NormalizedMotive.hpp"
 #include "Rng.hpp"
 
 namespace omnisfear {
@@ -35,6 +36,7 @@ struct MotiveEngine {
 
 	Mode mode = CAPTURE;
 	PhraseBuffer<BUFFER_CAP> buffer;
+	NormalizedMotive normalized;
 	Rng rng;
 
 	int   currentTick        = -1;
