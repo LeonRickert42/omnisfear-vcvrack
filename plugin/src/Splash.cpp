@@ -1,4 +1,5 @@
 #include "plugin.hpp"
+#include "PngImage.hpp"
 
 // OMNISFEAR SPLASH — v0.1 performance-gesture module.
 // Big button + ENERGY/CHAOS/COLOR knobs. Emits a trigger + two CVs
@@ -137,6 +138,8 @@ struct SplashWidget : ModuleWidget {
 		setPanel(createPanel(asset::plugin(pluginInstance, "res/Splash.svg")));
 
 		addChild(new SplashPanelText(box.size));
+		addChild(new PngImage(Vec(14.4f, 4.6f), Vec(22.0f, 1.86f),
+			asset::plugin(pluginInstance, "res/wordmark.png")));
 
 		addChild(createWidget<ScrewSilver>(Vec(RACK_GRID_WIDTH, 0)));
 		addChild(createWidget<ScrewSilver>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));

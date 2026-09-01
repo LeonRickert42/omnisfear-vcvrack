@@ -1,4 +1,5 @@
 #include "plugin.hpp"
+#include "PngImage.hpp"
 #include "engine/MotiveEngine.hpp"
 
 // OMNISFEAR MOTIVE — v0.2 capture & replay
@@ -232,28 +233,6 @@ struct Motive : Module {
 		engine.replayGateOffPos   = -1.f;
 		engine.latchedGate        = 0.f;
 		engine.latchedAccent      = 0.f;
-	}
-};
-
-// Small helper: renders a PNG (with alpha) at an mm-positioned box via NanoVG.
-struct PngImage : Widget {
-	std::string path;
-
-	PngImage(Vec posMm, Vec sizeMm, const std::string& p) {
-		box.pos = mm2px(posMm);
-		box.size = mm2px(sizeMm);
-		path = p;
-	}
-
-	void draw(const DrawArgs& args) override {
-		std::shared_ptr<Image> img = APP->window->loadImage(path);
-		if (!img)
-			return;
-		NVGpaint paint = nvgImagePattern(args.vg, 0, 0, box.size.x, box.size.y, 0.f, img->handle, 1.f);
-		nvgBeginPath(args.vg);
-		nvgRect(args.vg, 0, 0, box.size.x, box.size.y);
-		nvgFillPaint(args.vg, paint);
-		nvgFill(args.vg);
 	}
 };
 
