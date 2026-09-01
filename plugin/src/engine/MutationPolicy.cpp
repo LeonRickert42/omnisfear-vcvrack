@@ -9,10 +9,37 @@ static float clamp01(float x) {
 	return x;
 }
 
+// Rhythm-only pick for percussive material. Never touches pitch.
+static void applyRhythmOnly(NormalizedMotive& m, Rng& rng, float mutation, float density) {
+	int nOps = 1 + int(mutation * 2.5f + 0.5f);
+	for (int i = 0; i < nOps; i++) {
+		float r = rng.uniform();
+		if (r < 0.35f) {
+			int shift = 1 + int(rng.next() % 3u);
+			mutate_rotateRhythm(m, shift);
+		}
+		else if (r < 0.65f && rng.uniform() < density) {
+			mutate_addNeighbor(m, rng, /*preservePitch*/ true);
+		}
+		else if (r < 0.85f) {
+			mutate_removeEvent(m, rng);
+		}
+		else {
+			int shift = 1 + int(rng.next() % 5u);
+			mutate_rotateRhythm(m, shift);
+		}
+	}
+}
+
 void applyMutationCycle(NormalizedMotive& m, Rng& rng, float mutation, float density) {
 	if (m.count == 0) return;
 	mutation = clamp01(mutation);
 	density  = clamp01(density);
+
+	if (motiveIsFlat(m)) {
+		applyRhythmOnly(m, rng, mutation, density);
+		return;
+	}
 
 	// 1..4 ops depending on mutation strength.
 	int nOps = 1 + int(mutation * 3.f + 0.5f);

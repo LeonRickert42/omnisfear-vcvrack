@@ -48,11 +48,11 @@ struct Motive : Module {
 	Motive() {
 		config(PARAMS_LEN, INPUTS_LEN, OUTPUTS_LEN, LIGHTS_LEN);
 
-		configParam(MEMORY_PARAM,    0.f, 1.f, 0.5f,  "Memory",    "%", 0.f, 100.f);
-		configParam(MUTATION_PARAM,  0.f, 1.f, 0.25f, "Mutation",  "%", 0.f, 100.f);
-		configParam(FOLLOW_PARAM,    0.f, 1.f, 0.5f,  "Follow",    "%", 0.f, 100.f);
-		configParam(DENSITY_PARAM,   0.f, 1.f, 0.5f,  "Density",   "%", 0.f, 100.f);
-		configParam(VARIATION_PARAM, 0.f, 1.f, 0.25f, "Variation", "%", 0.f, 100.f);
+		configParam(MEMORY_PARAM,    0.f, 1.f, 0.60f, "Memory",    "%", 0.f, 100.f);
+		configParam(MUTATION_PARAM,  0.f, 1.f, 0.30f, "Mutation",  "%", 0.f, 100.f);
+		configParam(FOLLOW_PARAM,    0.f, 1.f, 0.75f, "Follow",    "%", 0.f, 100.f);
+		configParam(DENSITY_PARAM,   0.f, 1.f, 0.50f, "Density",   "%", 0.f, 100.f);
+		configParam(VARIATION_PARAM, 0.f, 1.f, 0.20f, "Variation", "%", 0.f, 100.f);
 
 		configInput(CLOCK_INPUT, "Clock");
 		configInput(CV_INPUT,    "Pitch CV");

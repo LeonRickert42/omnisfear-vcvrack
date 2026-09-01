@@ -107,7 +107,7 @@ void mutate_octaveDisplacement(NormalizedMotive& m, Rng& rng, float prob) {
 	recomputeDirection(m);
 }
 
-void mutate_addNeighbor(NormalizedMotive& m, Rng& rng) {
+void mutate_addNeighbor(NormalizedMotive& m, Rng& rng, bool preservePitch) {
 	if (m.count == 0 || m.count >= NormalizedMotive::MAX_EVENTS) return;
 	int idx = int(rng.uniform() * float(m.count));
 	if (idx >= m.count) idx = m.count - 1;
@@ -121,16 +121,32 @@ void mutate_addNeighbor(NormalizedMotive& m, Rng& rng) {
 
 	n.gateLen = 0.5f + rng.uniform() * 0.5f;
 
-	// Neighbor: ±1 or ±2 semitones from source, excluding zero.
-	int step = int(rng.next() % 4) - 2;
-	if (step == 0) step = 1;
-	n.pitchInterval = clampf(src.pitchInterval + float(step) / 12.f, -MAX_INTERVAL, MAX_INTERVAL);
+	if (preservePitch) {
+		n.pitchInterval = src.pitchInterval;
+	} else {
+		// Neighbor: ±1 or ±2 semitones from source, excluding zero.
+		int step = int(rng.next() % 4) - 2;
+		if (step == 0) step = 1;
+		n.pitchInterval = clampf(src.pitchInterval + float(step) / 12.f, -MAX_INTERVAL, MAX_INTERVAL);
+	}
 	n.velocity = src.velocity * 0.7f;
 
 	m.events[m.count++] = n;
 	sortByStart(m);
 	recomputeGrid(m);
 	recomputeDirection(m);
+}
+
+bool motiveIsFlat(const NormalizedMotive& m) {
+	if (m.count == 0) return true;
+	float mn = m.events[0].pitchInterval;
+	float mx = mn;
+	for (int i = 1; i < m.count; i++) {
+		float p = m.events[i].pitchInterval;
+		if (p < mn) mn = p;
+		if (p > mx) mx = p;
+	}
+	return (mx - mn) < 0.02f;
 }
 
 void mutate_removeEvent(NormalizedMotive& m, Rng& rng) {

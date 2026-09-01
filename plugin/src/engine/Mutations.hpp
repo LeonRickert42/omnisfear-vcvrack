@@ -18,8 +18,11 @@ void mutate_reverseContour    (NormalizedMotive& m);
 void mutate_rotateRhythm      (NormalizedMotive& m, int ticks);
 void mutate_expandIntervals   (NormalizedMotive& m, float factor);
 void mutate_octaveDisplacement(NormalizedMotive& m, Rng& rng, float prob);
-void mutate_addNeighbor       (NormalizedMotive& m, Rng& rng);
+void mutate_addNeighbor       (NormalizedMotive& m, Rng& rng, bool preservePitch = false);
 void mutate_removeEvent       (NormalizedMotive& m, Rng& rng);
+
+// True when the motive's pitches are essentially identical — treat as percussive.
+bool motiveIsFlat             (const NormalizedMotive& m);
 
 // Derived-field helpers used by mutations. Exposed for tests.
 void recomputeGrid            (NormalizedMotive& m);
